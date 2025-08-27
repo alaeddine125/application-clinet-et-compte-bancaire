@@ -1,0 +1,86 @@
+﻿@page
+@model ClientApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "CRUD Clients";
+}
+<h2 class="mb-3">Recherche d’un client</h2>
+<form method="get" class="d-flex mb-3">
+    <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control me-2" placeholder="Nom, Prénom, CIN, Téléphone..." />
+    <button type="submit" class="btn btn-primary me-2">🔍 Rechercher</button>
+    <a asp-page="/Index" class="btn btn-secondary">♻ Réinitialiser</a>
+</form>
+
+
+<hr />
+
+<div class="container mt-4">
+    <h2 class="mb-3">Ajouter un client</h2>
+    <form method="post" asp-page-handler="Ajouter" class="row g-2">
+        <div class="col-md-3">
+            <input asp-for="NouveauClient.Nom" class="form-control" placeholder="Nom" required />
+        </div>
+        <div class="col-md-3">
+            <input asp-for="NouveauClient.Prenom" class="form-control" placeholder="Prénom" required />
+        </div>
+        <div class="col-md-2">
+            <input asp-for="NouveauClient.CIN" class="form-control" placeholder="CIN" required />
+        </div>
+        <div class="col-md-2">
+            <input asp-for="NouveauClient.Telephone" class="form-control" placeholder="Téléphone" required />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100">➕ Ajouter</button>
+        </div>
+    </form>
+
+    <hr />
+
+    <h2>Liste des clients</h2>
+    @if (Model.ClientsFiltres.Count == 0)
+    {
+        <div class="alert alert-warning">Aucun client trouvé.</div>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>CIN</th>
+                    <th>Téléphone</th>
+                    <th>Actions</th>
+                    <th>Compte</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model.ClientsFiltres)
+                {
+                    <tr>
+                        <form method="post" asp-page-handler="Modifier" class="d-flex">
+                        <td>@c.Id <input type="hidden" name="id" value="@c.Id" /></td>
+                        <td><input type="text" name="nom" value="@c.Nom" class="form-control" required /></td>
+                        <td><input type="text" name="prenom" value="@c.Prenom" class="form-control" required /></td>
+                        <td><input type="number" name="cin" value="@c.CIN" class="form-control" required /></td>
+                        <td><input type="number" name="telephone" value="@c.Telephone" class="form-control" required /></td>
+                        <td>
+                            <button type="submit" class="btn btn-warning btn-sm">✏ Modifier</button>
+                        </td>
+                        </form>
+                        <td>
+                            <form method="post" asp-page-handler="Supprimer" style="display:inline;">
+                                <input type="hidden" name="id" value="@c.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">🗑 Supprimer</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a asp-page="/Compte" asp-route-id="@c.Id" asp-route-nom="@c.Nom" class="btn btn-info btn-sm">💳 Compte</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

@@ -1,0 +1,24 @@
+﻿@page "{id:int}/{nom}"
+@model ClientApp.Pages.CompteModel
+@{
+    ViewData["Title"] = "Compte client";
+}
+
+<h2>Compte de @Model.NomClient (ID: @Model.ClientId)</h2>
+
+<form method="post">
+    <label>Solde :</label>
+    <input type="number" step="0.01" name="Solde" required />
+
+    <label>RIB :</label>
+    <input type="text" name="RIB" required />
+
+    <button type="submit">Enregistrer</button>
+</form>
+
+@if (Model.CompteCree != null)
+{
+    <h3>Compte enregistré :</h3>
+    <p>Solde : @Model.CompteCree.Solde</p>
+    <p>RIB : @Model.CompteCree.RIB</p>
+}
